@@ -1,18 +1,13 @@
-## Getting Started
+## Commandes du Menu Principal
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+Le menu principal de l'application comprend les commandes suivantes :
 
-## Folder Structure
+- `1. Ajouter un client` : Vous permet d'ajouter un nouveau client à la base de données du restaurant.
+- `2. Voir le menu` : Affiche le menu actuel avec tous les plats disponibles et leurs prix.
+- `3. Passer une commande` : Vous permet de passer une commande pour un client en sélectionnant des plats du menu.
+- `4. Voir les commandes` : Affiche toutes les commandes passées, y compris les détails tels que le nom du client et les plats commandés.
+- `5. Mettre à jour une commande` : Vous permet de mettre à jour une commande existante, comme changer les plats ou les quantités.
+- `6. Supprimer une commande` : Vous permet de supprimer une commande existante du système.
+- `7. Quitter` : Quitte l'application.
 
-The workspace contains two folders by default, where:
-
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Chaque commande est conçue pour vous aider à gérer efficacement les opérations du restaurant.
