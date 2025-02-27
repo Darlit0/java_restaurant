@@ -21,7 +21,7 @@ public class PrintRestaurantList extends Command {
         ArrayList<Restaurant> restaurants = dbRestaurant.getRestaurants();
 
         for (int i = 0; i < restaurants.size(); i++) {
-            System.out.printf("%d. %s\n", i+1, restaurants.get(i).getName());
+            System.out.printf("%d. %s, Adresse: %s\n", i+1, restaurants.get(i).getName(), restaurants.get(i).getAddress());
         }
     }
 }

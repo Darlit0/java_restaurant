@@ -21,6 +21,7 @@ public class Main {
             Command[] commands = {
                     new Commands.AddRestaurant(dbRestaurant, scanner),
                     new Commands.DeleteRestaurant(dbRestaurant, scanner),
+                    new Commands.DeleteEmploye(dbEmploye, scanner),
                     new Commands.PrintRestaurantList(dbRestaurant),
                     new Commands.PrintEmployeList(dbEmploye),
                     new Commands.AddEmploye(dbEmploye, scanner),

@@ -39,20 +39,20 @@ public class DbEmploye extends DataBase<Employe> {
 
     @Override
     public ArrayList<Employe> loadAll() {
-        ArrayList<Employe> employes = new ArrayList<Employe>();
+        ArrayList<Employe> employes = new ArrayList<>();
         File folder = new File("./employes/");
 
-        // Vérifiez si le répertoire existe et est un répertoire
         if (folder.exists() && folder.isDirectory()) {
             File[] listOfFiles = folder.listFiles();
 
-            // Vérifiez si listOfFiles n'est pas null
             if (listOfFiles != null) {
                 for (File file : listOfFiles) {
                     if (file.isFile() && file.getName().startsWith("employe_")) {
                         Employe employe = this.load(file);
                         if (employe != null) {
                             employes.add(employe);
+                        } else {
+                            System.out.println("Erreur lors du chargement de l'employé depuis le fichier : " + file.getName());
                         }
                     }
                 }
@@ -97,23 +97,38 @@ public class DbEmploye extends DataBase<Employe> {
 
     @Override
     public void create(Employe employe) {
-        String filename = String.format("./employes/employe_%d.txt", employe.getId());
-        File f = new File(filename);
+        String directoryPath = "./employes/";
+        File directory = new File(directoryPath);
+
+        // Check if the directory exists, if not, create it
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                System.err.println("Erreur lors de la création du répertoire " + directoryPath);
+                return;
+            }
+        }
+
+        String filename = String.format(directoryPath + "employe_%d.txt", employe.getId());
+        File file = new File(filename);
 
         System.out.println("Sauvegarde de l'employé dans " + filename);
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
-
-            writer.append(Integer.toString(employe.getId()));
-            writer.append("\n");
-            writer.append(employe.getName());
-            writer.append("\n");
-            writer.append(employe.getFirstname());
-            writer.append("\n");
-            writer.close();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(Integer.toString(employe.getId()));
+            writer.newLine();
+            writer.write(employe.getName());
+            writer.newLine();
+            writer.write(employe.getFirstname());
+            writer.newLine();
+            writer.write(employe.getRole());
+            writer.newLine();
+            writer.write(Integer.toString(employe.getSalaire()));
+            writer.newLine();
+            writer.write(employe.getDateEmbauche());
+            writer.newLine();
         } catch (IOException e) {
-            System.out.println("Erreur lors de la sauvegarde de l'employé");
+            System.err.println("Erreur lors de la sauvegarde de l'employé : " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

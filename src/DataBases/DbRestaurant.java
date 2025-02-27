@@ -18,37 +18,21 @@ public class DbRestaurant extends DataBase<Restaurant> {
     }
 
     @Override
-    public Restaurant load(File file) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            int id = Integer.parseInt(reader.readLine());
-            String name = reader.readLine();
-            String address = reader.readLine();
-            reader.close();
-
-            return new Restaurant(id, name, address);
-        } catch (IOException e) {
-            System.out.println("Erreur lors de la lecture du fichier " + file.getName());
-            return null;
-        }
-    }
-
-    @Override
     public ArrayList<Restaurant> loadAll() {
-        ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
         File folder = new File("./restaurants/");
 
-        // Vérifiez si le répertoire existe et est un répertoire
         if (folder.exists() && folder.isDirectory()) {
             File[] listOfFiles = folder.listFiles();
 
-            // Vérifiez si listOfFiles n'est pas null
             if (listOfFiles != null) {
                 for (File file : listOfFiles) {
                     if (file.isFile() && file.getName().startsWith("restaurant_")) {
                         Restaurant restaurant = this.load(file);
                         if (restaurant != null) {
                             restaurants.add(restaurant);
+                        } else {
+                            System.out.println("Erreur lors du chargement du restaurant depuis le fichier : " + file.getName());
                         }
                     }
                 }
@@ -93,23 +77,47 @@ public class DbRestaurant extends DataBase<Restaurant> {
 
     @Override
     public void create(Restaurant restaurant) {
-        String filename = String.format("./restaurants/restaurant_%d.txt", restaurant.getId());
-        File f = new File(filename);
+        String directoryPath = "./restaurants/";
+        File directory = new File(directoryPath);
+
+        // Vérifiez si le répertoire existe, sinon créez-le
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                System.err.println("Erreur lors de la création du répertoire " + directoryPath);
+                return;
+            }
+        }
+
+        String filename = String.format(directoryPath + "restaurant_%d.txt", restaurant.getId());
+        File file = new File(filename);
 
         System.out.println("Sauvegarde du restaurant dans " + filename);
 
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(f));
-
-            writer.append(Integer.toString(restaurant.getId()));
-            writer.append("\n");
-            writer.append(restaurant.getName());
-            writer.append("\n");
-            writer.append(restaurant.getAddress());
-            writer.append("\n");
-            writer.close();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(Integer.toString(restaurant.getId()));
+            writer.newLine();
+            writer.write(restaurant.getName());
+            writer.newLine();
+            writer.write(restaurant.getAddress());
+            writer.newLine();
         } catch (IOException e) {
-            System.out.println("Erreur lors de la sauvegarde du restaurant");
+            System.err.println("Erreur lors de la sauvegarde du restaurant : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Restaurant load(File file) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            int id = Integer.parseInt(reader.readLine());
+            String name = reader.readLine();
+            String address = reader.readLine();
+            reader.close();
+            return new Restaurant(id, name, address);
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la lecture du fichier " + file.getName());
+            return null;
         }
     }
 }
